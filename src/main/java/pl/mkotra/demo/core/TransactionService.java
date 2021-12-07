@@ -45,4 +45,8 @@ public class TransactionService {
         TransactionDB saved = transactionRepository.save(transactionDB);
         return TransactionMapper.INSTANCE.toModel(saved);
     }
+
+    public void deleteAll() {
+        transactionRepository.deleteAll();
+    }
 }

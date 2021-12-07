@@ -16,9 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TransactionControllerIT extends BaseIT {
 
-    @Autowired
-    TransactionService transactionService;
-
     @Test
     void shouldReturnErrorWhenRequestIsNotValid() {
         //given
