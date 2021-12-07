@@ -10,11 +10,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/points")
-public class PointsController {
+public class PointController {
 
     private final PointsService pointsService;
 
-    public PointsController(PointsService pointsService) {
+    public PointController(PointsService pointsService) {
         this.pointsService = pointsService;
     }
 
