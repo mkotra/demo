@@ -1,0 +1,22 @@
+spring:
+  main:
+    banner-mode: "OFF"
+  data:
+    mongodb:
+      database: "demo"
+
+server:
+  port: 8080
+
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG

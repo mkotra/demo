@@ -1,2 +1,1 @@
-# demo
-demo spring boot app
+# discount demo
