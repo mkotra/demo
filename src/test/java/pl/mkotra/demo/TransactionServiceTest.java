@@ -35,7 +35,6 @@ public class TransactionServiceTest {
         //then
         assertEquals(1, transactions.size());
         Transaction transaction = transactions.get(0);
-
         assertEquals("ID", transaction.getId());
         assertEquals("CUSTOMER_ID", transaction.getCustomerId());
         assertEquals(new BigDecimal(10), transaction.getAmount());
