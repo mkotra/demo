@@ -21,8 +21,15 @@
 # Option 3
 Just import it to IntelliJ IDEA and run DemoApplication
 
+## Check if everything is OK: 
+http://localhost:8080/actuator/health
+
 ## Navigate to swagger-ui
 http://localhost:8080
 
 /transactions/persist-random can be used to create random transactions. 
+
+## Info
+There are two implementations of calculation algorithm. 
+One in pure java, one in MongoDB aggregation framework. 
     
