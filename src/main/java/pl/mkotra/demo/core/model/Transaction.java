@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public class Transaction {
 
+    private final static BigDecimal MAX_AMOUNT_FOR_POINTS_CALCULATION = new BigDecimal("10000.00");
+
     private String id;
     private String customerId;
     private BigDecimal amount;
@@ -61,6 +63,7 @@ public class Transaction {
 
     public int points(int threshold, int thresholdFactor) {
         return Optional.ofNullable(amount)
+                .map(amount -> amount.min(MAX_AMOUNT_FOR_POINTS_CALCULATION))
                 .map(BigDecimal::intValue)
                 .map(amount -> Integer.max(amount - threshold, 0))
                 .map(amount -> amount * thresholdFactor)

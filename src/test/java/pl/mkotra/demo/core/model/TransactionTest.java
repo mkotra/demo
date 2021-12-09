@@ -63,17 +63,14 @@ class TransactionTest {
     }
 
     @Test
-    public void shouldFailRatherForLargeNumbers() {
-        //TODO:
-
+    public void shouldNotFailForLargeAmount() {
         //given
         Transaction transaction = new Transaction("ID", "CUSTOMER_ID", BigDecimal.valueOf(Double.MAX_VALUE), now());
-        int largeThresholdFactor = Integer.MAX_VALUE;
 
         //when
-        int result = transaction.points(100, largeThresholdFactor);
+        int result = transaction.points(100, 1);
 
         //then
-        assertEquals(0, result);
+        assertEquals(9900, result);
     }
 }
