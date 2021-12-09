@@ -24,10 +24,11 @@ public class PointsByMonthCalculator {
     private static void addPoints(Map<Pair<String, Integer>, Integer> pointsMap, Transaction transaction) {
         String customerId = transaction.getCustomerId();
         int month = transaction.month();
-        int points = transaction.points(FIRST_THRESHOLD, 1) + transaction.points(SECOND_THRESHOLD, SECOND_THRESHOLD_FACTOR);
+        int threshold1Points =  transaction.points(FIRST_THRESHOLD, 1);
+        int threshold2Points =  transaction.points(SECOND_THRESHOLD, SECOND_THRESHOLD_FACTOR);
         Pair<String, Integer> key = Pair.of(customerId, month);
         Integer totalPoints = pointsMap.getOrDefault(key, 0);
-        totalPoints += points;
+        totalPoints = totalPoints + threshold1Points + threshold2Points;
         pointsMap.put(key, totalPoints);
     }
 

@@ -1,6 +1,7 @@
 package pl.mkotra.demo.controller;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import pl.mkotra.demo.core.model.PointsByMonth;
 import pl.mkotra.demo.core.model.Transaction;
 import pl.mkotra.demo.core.model.fixture.TransactionFixture;
@@ -12,8 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PointControllerIT extends BaseIT {
 
-    @Test
-    void shouldCalculatePoints() {
+    @ParameterizedTest
+    @ValueSource(strings = {"/points/database", "/points/java"})
+    void shouldCalculatePoints(String uriPath) {
         //given
         Transaction transaction = TransactionFixture.transaction();
         transactionService.save(List.of(transaction, transaction));
@@ -21,7 +23,7 @@ public class PointControllerIT extends BaseIT {
         //when
         List<PointsByMonth> result = webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/points")
+                        .path(uriPath)
                         .build())
                 .exchange()
                 .expectStatus()
