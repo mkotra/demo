@@ -4,12 +4,14 @@ import io.swagger.models.auth.In;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import pl.mkotra.demo.core.service.PointsByMonthCalculator;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.now;
 import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.parse;
+import static pl.mkotra.demo.core.service.PointsByMonthCalculator.*;
 
 class TransactionTest {
 
@@ -56,7 +58,7 @@ class TransactionTest {
         Transaction transaction = new Transaction("ID", "CUSTOMER_ID", amount, now());
 
         //when
-        int result = transaction.points(threshold, thresholdFactor, Integer.MAX_VALUE);
+        int result = transaction.points(threshold, thresholdFactor, FINAL_THRESHOLD);
 
         //then
         assertEquals(expected, result);
@@ -68,9 +70,9 @@ class TransactionTest {
         Transaction transaction = new Transaction("ID", "CUSTOMER_ID", BigDecimal.valueOf(Double.MAX_VALUE), now());
 
         //when
-        int result = transaction.points(100, 1, Integer.MAX_VALUE);
+        int result = transaction.points(100, 1, FINAL_THRESHOLD);
 
         //then
-        assertEquals(9900, result);
+        assertEquals(99900, result);
     }
 }

@@ -15,6 +15,7 @@ public class PointsByMonthCalculator {
 
     public static final int FIRST_THRESHOLD = 50;
     public static final int SECOND_THRESHOLD = 100;
+    public static final int FINAL_THRESHOLD = 100000;
     public static final int SECOND_THRESHOLD_FACTOR = 2;
 
 
@@ -28,7 +29,7 @@ public class PointsByMonthCalculator {
         String customerId = transaction.getCustomerId();
         int month = transaction.month();
         int threshold1Points =  transaction.points(FIRST_THRESHOLD, 1, SECOND_THRESHOLD);
-        int threshold2Points =  transaction.points(SECOND_THRESHOLD, SECOND_THRESHOLD_FACTOR, Integer.MAX_VALUE);
+        int threshold2Points =  transaction.points(SECOND_THRESHOLD, SECOND_THRESHOLD_FACTOR, FINAL_THRESHOLD);
         Pair<String, Integer> key = Pair.of(customerId, month);
         Integer totalPoints = pointsMap.getOrDefault(key, 0);
         totalPoints = totalPoints + threshold1Points + threshold2Points;
