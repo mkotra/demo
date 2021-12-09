@@ -55,7 +55,9 @@ class TransactionCustomRepositoryImpl implements TransactionCustomRepository {
         AggregationOperation project7 = Aggregation.project("customerId", "month")
                 .andExpression("effectivePoints1 + effectivePoints2").as("points");
 
-        Aggregation aggregation = Aggregation.newAggregation(match, project1, project2, project3, project4, group, project5, project6, project7);
+        Aggregation aggregation = Aggregation.newAggregation(
+                match, project1, project2, project3, project4, group, project5, project6, project7
+        );
         return mongoTemplate.aggregate(aggregation, "transactions", PointsByMonth.class).getMappedResults();
     }
 }
