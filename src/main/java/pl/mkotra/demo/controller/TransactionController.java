@@ -2,16 +2,17 @@ package pl.mkotra.demo.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import pl.mkotra.demo.core.TransactionService;
-import pl.mkotra.demo.exception.NotFoundException;
-import pl.mkotra.demo.factory.TransactionFactory;
-import pl.mkotra.demo.model.Transaction;
-import pl.mkotra.demo.request.CreateTransactionRequest;
+import pl.mkotra.demo.core.exception.ResourceNotFoundException;
+import pl.mkotra.demo.core.factory.OffsetDateTimeFactory;
+import pl.mkotra.demo.core.factory.TransactionFactory;
+import pl.mkotra.demo.core.model.Transaction;
+import pl.mkotra.demo.core.request.CreateTransactionRequest;
+import pl.mkotra.demo.core.service.TransactionService;
 
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 import java.util.Collection;
+
+import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.*;
 
 @RestController
 @RequestMapping("/transactions")
@@ -23,7 +24,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/persist-random")
+    @PostMapping("/persist-random-data")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void persistRandomData(@RequestParam int size) {
         transactionService.persistRandom(size);
@@ -32,13 +33,13 @@ public class TransactionController {
     @GetMapping("/{id}")
     public Transaction find(@PathVariable String id) {
         return transactionService.find(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public Transaction create(@RequestBody @Valid CreateTransactionRequest createTransactionRequest) {
-        Transaction transaction = TransactionFactory.create(createTransactionRequest, OffsetDateTime.now());
+        Transaction transaction = TransactionFactory.create(createTransactionRequest, now());
         return transactionService.save(transaction);
     }
 

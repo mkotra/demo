@@ -3,8 +3,8 @@ package pl.mkotra.demo.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.mkotra.demo.core.PointsService;
-import pl.mkotra.demo.model.PointsByMonth;
+import pl.mkotra.demo.core.service.PointsService;
+import pl.mkotra.demo.core.model.PointsByMonth;
 
 import java.util.List;
 
@@ -18,9 +18,15 @@ public class PointController {
         this.pointsService = pointsService;
     }
 
-    @GetMapping
-    public List<PointsByMonth> calculatePoints() {
-        return pointsService.pointsByMonth();
+    @GetMapping("/database")
+    public List<PointsByMonth> calculatePointsOnDatabase() {
+        return pointsService.calculateOnDatabase();
     }
+
+    @GetMapping("/java")
+    public List<PointsByMonth> calculatePointsInJava() {
+        return pointsService.calculatePointsInJava();
+    }
+
 
 }

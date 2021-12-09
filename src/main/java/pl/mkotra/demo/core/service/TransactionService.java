@@ -1,8 +1,9 @@
-package pl.mkotra.demo.core;
+package pl.mkotra.demo.core.service;
 
 import org.springframework.stereotype.Service;
-import pl.mkotra.demo.model.Transaction;
-import pl.mkotra.demo.model.TransactionFixture;
+import pl.mkotra.demo.core.mapper.TransactionMapper;
+import pl.mkotra.demo.core.model.Transaction;
+import pl.mkotra.demo.core.model.fixture.TransactionFixture;
 import pl.mkotra.demo.storage.TransactionDB;
 import pl.mkotra.demo.storage.TransactionRepository;
 
@@ -25,28 +26,36 @@ public class TransactionService {
     }
 
     public Optional<Transaction> find(String id) {
-        return transactionRepository.findById(id).map(TransactionMapper.INSTANCE::toModel);
+        return transactionRepository.findById(id).map(this::toModel);
     }
 
     public List<Transaction> findAll() {
         return transactionRepository.findAll().stream()
-                .map(TransactionMapper.INSTANCE::toModel)
+                .map(this::toModel)
                 .toList();
     }
 
     public List<Transaction> save(List<Transaction> transactions) {
-        List<TransactionDB> transactionDBs = transactions.stream().map(TransactionMapper.INSTANCE::toDB).toList();
+        List<TransactionDB> transactionDBs = transactions.stream().map(this::toDB).toList();
         List<TransactionDB> saved = transactionRepository.saveAll(transactionDBs);
-        return saved.stream().map(TransactionMapper.INSTANCE::toModel).toList();
+        return saved.stream().map(this::toModel).toList();
     }
 
     public Transaction save(Transaction transaction) {
-        TransactionDB transactionDB = TransactionMapper.INSTANCE.toDB(transaction);
+        TransactionDB transactionDB = toDB(transaction);
         TransactionDB saved = transactionRepository.save(transactionDB);
-        return TransactionMapper.INSTANCE.toModel(saved);
+        return toModel(saved);
     }
 
     public void deleteAll() {
         transactionRepository.deleteAll();
+    }
+
+    private TransactionDB toDB(Transaction transaction) {
+        return TransactionMapper.INSTANCE.toDB(transaction);
+    }
+
+    private Transaction toModel(TransactionDB transactionDB) {
+        return TransactionMapper.INSTANCE.toModel(transactionDB);
     }
 }

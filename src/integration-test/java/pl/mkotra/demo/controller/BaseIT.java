@@ -11,7 +11,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
-import pl.mkotra.demo.core.TransactionService;
+import pl.mkotra.demo.core.service.TransactionService;
 
 import java.time.Duration;
 

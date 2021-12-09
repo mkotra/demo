@@ -1,9 +1,12 @@
-package pl.mkotra.demo.model;
+package pl.mkotra.demo.core.model;
 
 import java.math.BigDecimal;
+import java.time.Month;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 public class Transaction {
+
     private String id;
     private String customerId;
     private BigDecimal amount;
@@ -17,7 +20,6 @@ public class Transaction {
         this.amount = amount;
         this.timestamp = timestamp;
     }
-
 
     public String getId() {
         return id;
@@ -49,5 +51,19 @@ public class Transaction {
 
     public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int month() {
+        return Optional.ofNullable(timestamp)
+                .map(OffsetDateTime::getMonth)
+                .map(Month::getValue).orElse(0);
+    }
+
+    public int points(int threshold, int thresholdFactor) {
+        return Optional.ofNullable(amount)
+                .map(BigDecimal::intValue)
+                .map(amount -> Integer.max(amount - threshold, 0))
+                .map(amount -> amount * thresholdFactor)
+                .orElse(0);
     }
 }

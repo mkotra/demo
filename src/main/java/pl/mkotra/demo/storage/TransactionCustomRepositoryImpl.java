@@ -4,16 +4,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
-import pl.mkotra.demo.model.PointsByMonth;
+import pl.mkotra.demo.core.model.PointsByMonth;
 
 import java.util.List;
 
 @Repository
-public class TransactionCustomRepositoryImpl implements TransactionCustomRepository {
-
-    private static final int FIRST_THRESHOLD = 50;
-    private static final int SECOND_THRESHOLD = 100;
-    private static final int SECOND_THRESHOLD_FACTOR = 2;
+class TransactionCustomRepositoryImpl implements TransactionCustomRepository {
 
     private final MongoTemplate mongoTemplate;
 
@@ -21,13 +17,13 @@ public class TransactionCustomRepositoryImpl implements TransactionCustomReposit
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<PointsByMonth> calculatePointsByMonth() {
-        AggregationOperation match = Aggregation.match(Criteria.where("amount").gt(FIRST_THRESHOLD));
+    public List<PointsByMonth> calculatePointsByMonth(int firstThreshold, int secondThreshold, int secondThresholdFactor) {
+        AggregationOperation match = Aggregation.match(Criteria.where("amount").gt(firstThreshold));
 
         AggregationOperation project1 = Aggregation.project("_id", "customerId")
                 .and(DateOperators.Month.month("$timestamp")).as("month")
-                .and("amount").minus(FIRST_THRESHOLD).as("amountOverFirstThreshold")
-                .and("amount").minus(SECOND_THRESHOLD).as("amountOverSecondThreshold");
+                .and("amount").minus(firstThreshold).as("amountOverFirstThreshold")
+                .and("amount").minus(secondThreshold).as("amountOverSecondThreshold");
 
         AggregationOperation group = Aggregation.group("customerId", "month")
                 .sum("amountOverFirstThreshold").as("totalAmountOverFirstThreshold")
@@ -44,7 +40,7 @@ public class TransactionCustomRepositoryImpl implements TransactionCustomReposit
                 .and(ArithmeticOperators.Floor.floorValueOf("$pointsThreshold2")).as("points2");
 
         AggregationOperation project4 = Aggregation.project("customerId", "month")
-                .and("points2").multiply(SECOND_THRESHOLD_FACTOR).plus("$points1").as("points");
+                .and("points2").multiply(secondThresholdFactor).plus("$points1").as("points");
 
         Aggregation aggregation = Aggregation.newAggregation(match, project1, group, project2, project3, project4);
         return mongoTemplate.aggregate(aggregation, "transactions", PointsByMonth.class).getMappedResults();

@@ -1,8 +1,15 @@
-package pl.mkotra.demo.model;
+package pl.mkotra.demo.core.model.fixture;
+
+import pl.mkotra.demo.core.model.Transaction;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.now;
+import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.parse;
 
 public class TransactionFixture {
 
@@ -11,7 +18,8 @@ public class TransactionFixture {
     );
 
     static final List<BigDecimal> AMOUNTS = Arrays.asList(
-            BigDecimal.TEN,
+            new BigDecimal("0.50"),
+            new BigDecimal("10.00"),
             new BigDecimal("50.30"),
             new BigDecimal("75.20"),
             new BigDecimal("100.25"),
@@ -27,7 +35,7 @@ public class TransactionFixture {
     );
 
     public static Transaction transaction() {
-        return new Transaction(null, "CUSTOMER_ID", new BigDecimal("120.25"), OffsetDateTime.parse("2021-12-12T00:00:00.000Z"));
+        return new Transaction(null, "CUSTOMER_ID", new BigDecimal("120.25"), parse("2021-12-12T00:00:00.000Z"));
     }
 
     public static List<Transaction> random(int size) {
@@ -40,7 +48,7 @@ public class TransactionFixture {
                     null,
                     CUSTOMERS.get(0),
                     AMOUNTS.get(0),
-                    OffsetDateTime.now(TimeZone.getTimeZone("UTC").toZoneId()).plusMonths(MONTHS.get(0))
+                    now().plusMonths(MONTHS.get(0))
             );
 
             transactions.add(transaction);

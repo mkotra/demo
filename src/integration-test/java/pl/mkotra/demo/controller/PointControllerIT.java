@@ -1,11 +1,9 @@
 package pl.mkotra.demo.controller;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import pl.mkotra.demo.core.TransactionService;
-import pl.mkotra.demo.model.PointsByMonth;
-import pl.mkotra.demo.model.Transaction;
-import pl.mkotra.demo.model.TransactionFixture;
+import pl.mkotra.demo.core.model.PointsByMonth;
+import pl.mkotra.demo.core.model.Transaction;
+import pl.mkotra.demo.core.model.fixture.TransactionFixture;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class PointControllerIT extends BaseIT {
 
     @Test
-    void shouldReturnDiscounts() {
+    void shouldCalculatePoints() {
         //given
         Transaction transaction = TransactionFixture.transaction();
         transactionService.save(List.of(transaction, transaction));

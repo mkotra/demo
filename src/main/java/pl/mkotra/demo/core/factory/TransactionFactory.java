@@ -1,7 +1,7 @@
-package pl.mkotra.demo.factory;
+package pl.mkotra.demo.core.factory;
 
-import pl.mkotra.demo.model.Transaction;
-import pl.mkotra.demo.request.CreateTransactionRequest;
+import pl.mkotra.demo.core.model.Transaction;
+import pl.mkotra.demo.core.request.CreateTransactionRequest;
 
 import java.time.OffsetDateTime;
 

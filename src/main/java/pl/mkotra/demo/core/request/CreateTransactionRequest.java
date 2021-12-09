@@ -1,4 +1,4 @@
-package pl.mkotra.demo.request;
+package pl.mkotra.demo.core.request;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;

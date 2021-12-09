@@ -1,4 +1,4 @@
-package pl.mkotra.demo.converter;
+package pl.mkotra.demo.storage.converter;
 
 import org.springframework.core.convert.converter.Converter;
 

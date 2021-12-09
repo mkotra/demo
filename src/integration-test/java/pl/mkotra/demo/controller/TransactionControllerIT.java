@@ -1,12 +1,10 @@
 package pl.mkotra.demo.controller;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.BodyInserters;
-import pl.mkotra.demo.core.TransactionService;
-import pl.mkotra.demo.model.Transaction;
-import pl.mkotra.demo.model.TransactionFixture;
-import pl.mkotra.demo.request.CreateTransactionRequest;
+import pl.mkotra.demo.core.model.Transaction;
+import pl.mkotra.demo.core.model.fixture.TransactionFixture;
+import pl.mkotra.demo.core.request.CreateTransactionRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
