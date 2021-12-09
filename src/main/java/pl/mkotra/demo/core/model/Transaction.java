@@ -61,10 +61,11 @@ public class Transaction {
                 .map(Month::getValue).orElse(0);
     }
 
-    public int points(int threshold, int thresholdFactor) {
+    public int points(int threshold, int thresholdFactor, int nextThreshold) {
         return Optional.ofNullable(amount)
                 .map(amount -> amount.min(MAX_AMOUNT_FOR_POINTS_CALCULATION))
                 .map(BigDecimal::intValue)
+                .map(amount -> Integer.min(amount, nextThreshold))
                 .map(amount -> Integer.max(amount - threshold, 0))
                 .map(amount -> amount * thresholdFactor)
                 .orElse(0);

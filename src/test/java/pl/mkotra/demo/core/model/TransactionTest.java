@@ -1,14 +1,14 @@
 package pl.mkotra.demo.core.model;
 
+import io.swagger.models.auth.In;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import pl.mkotra.demo.core.factory.OffsetDateTimeFactory;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.*;
+import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.now;
 import static pl.mkotra.demo.core.factory.OffsetDateTimeFactory.parse;
 
 class TransactionTest {
@@ -56,7 +56,7 @@ class TransactionTest {
         Transaction transaction = new Transaction("ID", "CUSTOMER_ID", amount, now());
 
         //when
-        int result = transaction.points(threshold, thresholdFactor);
+        int result = transaction.points(threshold, thresholdFactor, Integer.MAX_VALUE);
 
         //then
         assertEquals(expected, result);
@@ -68,7 +68,7 @@ class TransactionTest {
         Transaction transaction = new Transaction("ID", "CUSTOMER_ID", BigDecimal.valueOf(Double.MAX_VALUE), now());
 
         //when
-        int result = transaction.points(100, 1);
+        int result = transaction.points(100, 1, Integer.MAX_VALUE);
 
         //then
         assertEquals(9900, result);

@@ -19,7 +19,7 @@
     $ ./mvnw clean package
     $ java -jar target/demo-0.0.1-SNAPSHOT.jar
 # Option 3
-Just import it to IDE and run DemoApplication
+Just import it to IntelliJ IDEA and run DemoApplication
 
 ## Navigate to swagger-ui
 http://localhost:8080

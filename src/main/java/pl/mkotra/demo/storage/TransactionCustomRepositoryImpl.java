@@ -20,29 +20,37 @@ class TransactionCustomRepositoryImpl implements TransactionCustomRepository {
     public List<PointsByMonth> calculatePointsByMonth(int firstThreshold, int secondThreshold, int secondThresholdFactor) {
         AggregationOperation match = Aggregation.match(Criteria.where("amount").gt(firstThreshold));
 
-        AggregationOperation project1 = Aggregation.project("_id", "customerId")
+        AggregationOperation project1 = Aggregation.project( "customerId")
                 .and(DateOperators.Month.month("$timestamp")).as("month")
-                .and("amount").minus(firstThreshold).as("amountOverFirstThreshold")
+                .and("amount").minus(firstThreshold).as("amountOverFirstThresholdIncludingAmountOverSecondThreshold")
                 .and("amount").minus(secondThreshold).as("amountOverSecondThreshold");
+
+        AggregationOperation project2 = Aggregation.project( "customerId", "month", "amountOverSecondThreshold")
+                .and("amountOverFirstThresholdIncludingAmountOverSecondThreshold").minus("$amountOverSecondThreshold")
+                .as("amountOverFirstThreshold");
 
         AggregationOperation group = Aggregation.group("customerId", "month")
                 .sum("amountOverFirstThreshold").as("totalAmountOverFirstThreshold")
                 .sum("amountOverSecondThreshold").as("totalAmountOverSecondThreshold");
 
-        AggregationOperation project2 = Aggregation.project("totalAmountOverFirstThreshold", "totalAmountOverSecondThreshold")
+        AggregationOperation project3 = Aggregation.project("totalAmountOverFirstThreshold", "totalAmountOverSecondThreshold")
                 .and("_id.customerId").as("customerId")
                 .and("_id.month").as("month")
                 .and("totalAmountOverFirstThreshold").as("pointsThreshold1")
                 .and("totalAmountOverSecondThreshold").as("pointsThreshold2");
 
-        AggregationOperation project3 = Aggregation.project("customerId", "month")
+        AggregationOperation project4 = Aggregation.project("customerId", "month")
                 .and(ArithmeticOperators.Floor.floorValueOf("$pointsThreshold1")).as("points1")
                 .and(ArithmeticOperators.Floor.floorValueOf("$pointsThreshold2")).as("points2");
 
-        AggregationOperation project4 = Aggregation.project("customerId", "month")
-                .and("points2").multiply(secondThresholdFactor).plus("$points1").as("points");
+        AggregationOperation project5 = Aggregation.project("customerId", "month")
+                .and("points1").as("effectivePoints1")
+                .and("points2").multiply(secondThresholdFactor).as("effectivePoints2");
 
-        Aggregation aggregation = Aggregation.newAggregation(match, project1, group, project2, project3, project4);
+        AggregationOperation project6 = Aggregation.project("customerId", "month")
+                .andExpression("effectivePoints1 + effectivePoints2").as("points");
+
+        Aggregation aggregation = Aggregation.newAggregation(match, project1, project2, group, project3, project4, project5, project6);
         return mongoTemplate.aggregate(aggregation, "transactions", PointsByMonth.class).getMappedResults();
     }
 }

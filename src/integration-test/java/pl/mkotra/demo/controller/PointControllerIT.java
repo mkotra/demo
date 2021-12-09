@@ -18,7 +18,7 @@ public class PointControllerIT extends BaseIT {
     void shouldCalculatePoints(String uriPath) {
         //given
         Transaction transaction = TransactionFixture.transaction();
-        transactionService.save(List.of(transaction, transaction));
+        transactionService.save(List.of(transaction));
 
         //when
         List<PointsByMonth> result = webTestClient.get()
@@ -37,6 +37,6 @@ public class PointControllerIT extends BaseIT {
         assertEquals(1, result.size());
         PointsByMonth actual = result.get(0);
         assertEquals(transaction.getCustomerId(), actual.getCustomerId());
-        assertEquals(180, actual.getPoints());
+        assertEquals(90, actual.getPoints());
     }
 }
