@@ -1,5 +1,6 @@
 package pl.mkotra.demo.core.model.fixture;
 
+import pl.mkotra.demo.core.factory.OffsetDateTimeFactory;
 import pl.mkotra.demo.core.model.Transaction;
 
 import java.math.BigDecimal;
@@ -54,5 +55,23 @@ public class TransactionFixture {
             transactions.add(transaction);
         }
         return transactions;
+    }
+
+    public static List<Transaction> example1() {
+        return List.of(
+                transaction("CUSTOMER_1", "120.35", "2021-11-12T00:00:00.000Z"),
+                transaction("CUSTOMER_1", "120.70", "2021-12-11T00:00:00.000Z"),
+                transaction("CUSTOMER_1", "120.70", "2021-12-13T00:00:00.000Z"),
+                transaction("CUSTOMER_2", "200.50", "2021-12-12T00:00:00.000Z"),
+                transaction("CUSTOMER_2", "70.50", "2021-12-12T00:00:00.000Z")
+        );
+    }
+
+    private static Transaction transaction(String customerId, String amount, String isoString) {
+        Transaction transaction = new Transaction();
+        transaction.setCustomerId(customerId);
+        transaction.setAmount(new BigDecimal(amount));
+        transaction.setTimestamp(OffsetDateTimeFactory.parse(isoString));
+        return transaction;
     }
 }

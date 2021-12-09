@@ -25,10 +25,9 @@ abstract class BaseIT {
     static final String MONGO_DATABASE = "demo_integration_test";
 
     @Container
-    static final MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse("mongo:4.4.8"));
-
+    static final MongoDBContainer MONGO = new MongoDBContainer(DockerImageName.parse("mongo:4.4.8"));
     static {
-        mongo.start();
+        MONGO.start();
     }
 
     @Autowired
@@ -39,7 +38,7 @@ abstract class BaseIT {
 
     @BeforeEach
     public void setUp() {
-        transactionService.deleteAll();
+        cleanDB();
         webTestClient = webTestClient
                 .mutate()
                 .responseTimeout(Duration.ofSeconds(20))
@@ -48,11 +47,16 @@ abstract class BaseIT {
 
     @AfterEach
     public void tearDown() {
+        cleanDB();
+    }
+
+    private void cleanDB() {
+        transactionService.deleteAll();
     }
 
     @DynamicPropertySource
     static void mongoProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.database", () -> MONGO_DATABASE);
-        registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
+        registry.add("spring.data.mongodb.uri", MONGO::getReplicaSetUrl);
     }
 }
