@@ -87,7 +87,7 @@ public class TransactionControllerIT extends BaseIT {
 
         //then
         assertNotNull(result);
-        assertEquals(1, result.size());
+        assertEquals(666, result.size());
         Transaction actual = result.get(0);
 
         assertNotNull(actual.getId());
