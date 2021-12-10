@@ -95,4 +95,25 @@ public class TransactionControllerIT extends BaseIT {
         assertEquals(transaction.getAmount(), actual.getAmount());
         assertEquals(transaction.getTimestamp(), actual.getTimestamp());
     }
+
+    @Test
+    void shouldDeleteTransactions() {
+        //given
+        Transaction transaction = TransactionFixture.transaction();
+        transactionService.save(transaction);
+
+        //when
+        webTestClient.delete()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/transactions")
+                        .build())
+                .exchange()
+                .expectStatus()
+                .isNoContent();
+
+        //then
+        List<Transaction> transactionsAfterDelete = transactionService.findAll();
+        assertNotNull(transactionsAfterDelete);
+        assertEquals(0, transactionsAfterDelete.size());
+    }
 }

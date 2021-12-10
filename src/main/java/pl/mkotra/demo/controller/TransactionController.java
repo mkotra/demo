@@ -47,4 +47,10 @@ public class TransactionController {
     public Collection<Transaction> findAll() {
         return transactionService.findAll();
     }
+
+    @DeleteMapping
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteAll() {
+        transactionService.deleteAll();
+    }
 }
