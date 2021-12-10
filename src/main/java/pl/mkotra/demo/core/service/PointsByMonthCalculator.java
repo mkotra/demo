@@ -18,7 +18,6 @@ public class PointsByMonthCalculator {
     public static final int FINAL_THRESHOLD = 100000;
     public static final int SECOND_THRESHOLD_FACTOR = 2;
 
-
     public static List<PointsByMonth> calculate(List<Transaction> transactions) {
         Map<Pair<String, Integer>, Integer> pointsMap = new HashMap<>();
         transactions.forEach(transaction -> addPoints(pointsMap, transaction));
